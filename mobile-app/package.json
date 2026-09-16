@@ -1,0 +1,29 @@
+{
+  "name": "spend-tracker-mobile",
+  "version": "0.1.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "prebuild": "expo prebuild"
+  },
+  "dependencies": {
+    "expo": "~51.0.0",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "@supabase/supabase-js": "^2.45.4",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-get-random-values": "^1.11.0",
+    "uuid": "^9.0.1",
+    "react-native-android-widget": "^0.14.0",
+    "react-native-shared-group-preferences": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/react": "~18.2.79",
+    "@types/uuid": "^9.0.8",
+    "typescript": "~5.3.3"
+  }
+}

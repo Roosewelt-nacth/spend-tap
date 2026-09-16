@@ -1,0 +1,19 @@
+{
+  "name": "spend-tracker",
+  "version": "0.1.0",
+  "description": "Always-on-top desktop widget for tracking UPI/cash spending with category budgets and AI feedback",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "electron-store": "^8.2.0"
+  },
+  "devDependencies": {
+    "electron": "^31.3.0"
+  }
+}

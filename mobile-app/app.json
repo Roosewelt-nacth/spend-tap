@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Spend Tracker",
+    "slug": "spend-tracker",
+    "scheme": "spendtracker",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#14161b"
+    },
+    "ios": {
+      "bundleIdentifier": "com.yourorg.spendtracker",
+      "supportsTablet": false,
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.com.yourorg.spendtracker"]
+      }
+    },
+    "android": {
+      "package": "com.yourorg.spendtracker",
+      "permissions": []
+    },
+    "plugins": [
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "SpendWidget",
+              "label": "Spend Tracker",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "description": "Today's spend vs your budget"
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}

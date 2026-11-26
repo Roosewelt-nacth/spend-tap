@@ -31,3 +31,5 @@ Thumbs.db
 ios-app/*.xcodeproj/
 ios-app/DerivedData/
 .build/
+ios-app/build/
+*.ipa

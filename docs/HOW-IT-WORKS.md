@@ -84,7 +84,7 @@ iOS cannot wake an app on 1 January. So the first time you open the app in a new
 
 ```bash
 git push mac master                    # from Windows
-ssh the Mac                            # then, on the Mac:
+ssh <your-mac>                         # then, on the Mac:
 cd ~/Documents/Austin/spend-tracker && git pull
 cd ios-app && ../../tools/xcodegen-dl/xcodegen/bin/xcodegen generate
 xcodebuild -project SpendTap.xcodeproj -scheme SpendTap \

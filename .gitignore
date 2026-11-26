@@ -43,3 +43,6 @@ android-app/local.properties
 android-app/.kotlin/
 *.keystore
 *.jks
+
+# private working notes (never publish)
+MAC-CLEANUP.md

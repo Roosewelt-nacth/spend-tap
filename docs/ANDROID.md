@@ -1,67 +1,75 @@
 # Spend Tap for Android: build, install, publish
 
-Everything runs from this Windows PC. The toolchain lives in `Desktop\Austin\android-toolchain` (JDK 17, Android SDK, Gradle caches) and nothing is installed system-wide.
+## Just want the app?
 
-## Build and test
+Download **SpendTap.apk** from the [latest release](../../../releases/latest) and open it on your phone. See the root README for the install steps.
 
-Git Bash:
+## Build it yourself
 
-```bash
-source <local-path>   # sets JAVA_HOME, ANDROID_HOME, caches
-cd <local-path>
-cmd //c ".\\gradlew.bat" test                 # logic tests (JVM, no phone needed)
-cmd //c ".\\gradlew.bat" assembleDebug        # app/build/outputs/apk/debug/app-debug.apk
-cmd //c ".\\gradlew.bat" assembleRelease bundleRelease
-```
-
-`env.sh` also forces Java to use IPv4. Without that, Gradle timed out reaching its download servers from this PC.
-
-## Install on your phone (USB)
-
-1. Phone: Settings, About phone, tap **Build number** 7 times. Then Settings, System, Developer options, turn on **USB debugging**.
-2. Plug in by USB and accept the "Allow USB debugging" prompt.
-3. Check it is seen, then install:
+You need JDK 17 and the Android SDK (platform 37.2 and build-tools 36.1.0). Command-line tools are enough; Android Studio is optional.
 
 ```bash
-source <local-path>
-adb devices
-adb install -r <local-path>
+cd android-app
+export JAVA_HOME=/path/to/jdk17
+export ANDROID_HOME=/path/to/android-sdk
+./gradlew test               # logic tests, run on the JVM, no phone needed
+./gradlew assembleDebug      # app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleRelease bundleRelease
 ```
 
-Without a cable you can copy `app-debug.apk` to the phone and open it. Android asks you to allow installs from that app (Files, Chrome, etc.).
+On Windows use `gradlew.bat`. If Gradle times out downloading, force IPv4: `export JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true`.
 
-## Using the quick log (Android's Back Tap)
+## Install on a phone with a cable
 
-- Open the app, then Settings, then **Add the tile**. Pull down Quick Settings: the **Log spend** tile opens a keypad over whatever app is open.
+1. Phone: Settings, About phone, tap **Build number** 7 times. Then Developer options, turn on **USB debugging**.
+2. Plug in by USB, set the USB mode to **File transfer**, and accept the debugging prompt.
+3. `adb devices`, then `adb install -r app/build/outputs/apk/debug/app-debug.apk`.
+
+No cable: copy the APK to the phone and open it.
+
+## Quick log (Android's Back Tap)
+
+- Settings, then **Add the tile**, then pull down Quick Settings and tap **Log spend**. A keypad floats over whatever app is open.
 - Long-press the app icon for the **Log spend** shortcut.
-- Pixel phones: Settings, System, Gestures, **Quick Tap**, then choose to open the app or its shortcut.
+- Pixel phones: Settings, System, Gestures, **Quick Tap**.
 
-## Before you publish
+## Releases and signing
 
-These are the things that must change. The ones marked (check) depend on rules I could not verify here, so confirm them in the Play Console.
+GitHub Actions (`.github/workflows/android.yml`) runs the tests on every push. Pushing a tag like `v0.1.0` also builds a **signed** APK and bundle and publishes them to a GitHub Release.
 
-1. **Package name.** `com.austin.spendtap` is permanent once uploaded. Change `applicationId` and `namespace` in `app/build.gradle.kts` to one you own, for example a domain you control reversed.
-2. **App icon.** The current icon is placeholder artwork. Replace `drawable/ic_launcher_foreground.xml` and `ic_tile.xml`.
-3. **Signing key.** Create an upload key once and keep it and its passwords safe. If it is lost you must go through Play's key reset.
+Signing uses four repository secrets, read through environment variables so no key is ever in the code:
+
+| Secret | Meaning |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | the `.jks` keystore, base64-encoded |
+| `ANDROID_KEYSTORE_PASSWORD` | keystore password |
+| `ANDROID_KEY_ALIAS` | key alias |
+| `ANDROID_KEY_PASSWORD` | key password |
+
+Create a key once and keep a backup somewhere safe. Losing it means users cannot update in place and must uninstall first:
 
 ```bash
-source <local-path>
-keytool -genkeypair -v -keystore spendtap-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkeypair -v -keystore release.jks -alias spendtap -keyalg RSA -keysize 2048 -validity 10000
+base64 -w0 release.jks     # paste the output into ANDROID_KEYSTORE_BASE64
 ```
 
-   Keep the `.jks` outside the repository (`.gitignore` already excludes `*.jks` and `*.keystore`). Add a `signingConfigs` block reading the passwords from `~/.gradle/gradle.properties`, not from files in the project.
-4. **Target API level (check).** The app targets API 36. Play requires new apps and updates to target a recent level. Check the current deadline.
-5. **Version.** Raise `versionCode` for every upload. It is 1 now.
-6. **Strings.** Text is hardcoded in English. Move it to `strings.xml` if you want other languages.
-7. **Privacy policy (check).** Required. State that data stays on the device and the only upload is the yearly report to a Google Sheet link the user supplies.
-8. **Data safety form (check).** Declare no data collected by you, and the optional user-initiated upload to their own Google Sheet.
-9. **Developer account (check).** One-time fee and identity verification. New personal accounts may have to run a closed test with a minimum number of testers before production.
-10. **Store listing.** 512px icon, feature graphic, at least two phone screenshots, short and full description.
-11. **Upload** the `.aab` from `app/build/outputs/bundle/release/` after signing it. Play App Signing then holds the final app key.
+Never commit the `.jks` (`.gitignore` already excludes `*.jks` and `*.keystore`).
+
+## Before publishing on Google Play
+
+Items marked (check) depend on rules to confirm in the Play Console.
+
+1. **Package name.** `com.austin.spendtap` is permanent once uploaded. Change `applicationId` and `namespace` first.
+2. **Signing.** Play wants an upload key. The key above can serve, or create a separate one.
+3. **Target API level (check).** The app targets API 36. Play requires a recent target for new apps.
+4. **Version.** `versionCode` must rise on every upload. CI sets it from the run number.
+5. **Privacy policy and data safety form (check).** Data stays on the device. The only upload is the yearly report to a Google Sheet the user links.
+6. **Developer account (check).** One-time fee. New personal accounts may need a closed test first.
+7. **Store listing.** 512 px icon is in `docs/store/play-icon-512.png`. You still need a feature graphic and screenshots.
+8. **Strings.** Text is hardcoded in English; move it to `strings.xml` for other languages.
 
 ## What has not been verified
 
-- The screens compile but have **not been seen on a device**. Glass, spacing and animations may need tuning.
-- The release build uses R8 shrinking. Room and kotlinx.serialization normally work with their built-in rules, but a release build has not been run on a phone. Test the signed release build before uploading.
-- The Quick Settings tile, shortcut and translucent sheet need a real phone.
+- The screens have been compiled but not reviewed on many devices.
+- The release build uses R8 shrinking. Room and kotlinx.serialization normally work with their built-in rules, but test a signed release build on a phone.
 - The Google Sheet export has not been tested against a real sheet.

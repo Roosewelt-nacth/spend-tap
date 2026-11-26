@@ -4,12 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
+import com.austin.spendtap.ui.SpendTapRoot
+import com.austin.spendtap.ui.SpendTapTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { Text("Spend Tap") }
+        setContent { SpendTapTheme { SpendTapRoot() } }
     }
 }

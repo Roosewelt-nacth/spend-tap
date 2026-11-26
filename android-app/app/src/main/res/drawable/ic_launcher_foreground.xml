@@ -1,7 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ring + rupee, drawn with plain strokes so it stays crisp at any size and works as the themed (monochrome) icon. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="#6EE7B7"
-        android:pathData="M54,54m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0" />
-    <path android:fillColor="#0B0D12"
-        android:pathData="M62,44H46V40H62V44zM62,52H46V48H62V52zM50,40H54C58,40 62,44 62,48S58,56 54,56H50L60,68H54L44,56V52H54C56,52 58,50 58,48S56,44 54,44H50V40z" />
+    <path
+        android:fillColor="#00000000" android:strokeColor="#6EE7B7" android:strokeWidth="3.6"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M81,54A27,27 0 1,1 27,54A27,27 0 1,1 81,54" />
+    <path
+        android:fillColor="#00000000" android:strokeColor="#6EE7B7" android:strokeWidth="3.6"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M44.5,41.5H63.5M44.5,48H63.5M48,41.5H53A7,7 0 0,1 53,55.5H48L60.5,68.5" />
 </vector>

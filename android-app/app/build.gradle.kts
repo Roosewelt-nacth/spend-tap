@@ -15,7 +15,7 @@ android {
         targetSdk = 36
         // CI passes the version (from the git tag) and an ever-increasing code; local builds use defaults.
         versionCode = System.getenv("APP_VERSION_CODE")?.toIntOrNull() ?: 1
-        versionName = System.getenv("APP_VERSION_NAME") ?: "0.1.0"
+        versionName = System.getenv("APP_VERSION_NAME")?.removePrefix("v") ?: "0.1.0"
     }
 
     // Release signing comes from environment variables so no key or password is ever in the repo.

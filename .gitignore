@@ -33,3 +33,13 @@ ios-app/DerivedData/
 .build/
 ios-app/build/
 *.ipa
+android-toolchain/
+
+# Android
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+android-app/local.properties
+android-app/.kotlin/
+*.keystore
+*.jks

@@ -1,0 +1,24 @@
+name: SpendTap
+options:
+  bundleIdPrefix: com.austin
+  deploymentTarget:
+    iOS: "26.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    DEVELOPMENT_TEAM: ""   # set in Xcode: Signing & Capabilities
+targets:
+  SpendTap:
+    type: application
+    platform: iOS
+    sources: [SpendTap]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.austin.spendtap
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Spend Tap
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic

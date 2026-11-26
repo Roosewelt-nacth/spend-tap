@@ -26,3 +26,8 @@ supabase/.temp/
 # OS
 .DS_Store
 Thumbs.db
+
+# iOS (generated / build output)
+ios-app/*.xcodeproj/
+ios-app/DerivedData/
+.build/
